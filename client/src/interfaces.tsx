@@ -1,6 +1,6 @@
 export interface user {
     userId: string,
-    username: string,
+    name: string,
     description: string,
     legoSets: any,
     followed: user[],
