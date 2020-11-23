@@ -21,9 +21,9 @@
   
   function scrollFunction() {
     if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-      document.getElementById("logo").style.height = "0px";
+      document.getElementById("logo").classList.add('compressed');
     } else {
-      document.getElementById("logo").style.height = "200px";
+      document.getElementById("logo").classList.remove('compressed');
     }
   }
   </script>

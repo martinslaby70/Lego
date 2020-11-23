@@ -1,3 +1,5 @@
+@import './assets/transition.scss';
+
 body {
   margin: 0;
   scroll-behavior: smooth;
@@ -5,5 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family : 'Ubuntu', sans-serif;
   min-height: 200vh;
+  background-color: rgba(255, 253, 197, 0.405);
 }
 

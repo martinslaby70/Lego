@@ -16,7 +16,12 @@ interface props {
 }
 export const UserContextProvider = ({children}: props) => {
 
-    const [user, setUser] = useState<user | null>(null);
+    const userValue = () => {
+        
+        return null
+    }
+
+    const [user, setUser] = useState<user | null>(userValue);
     
     const logOut = () => setUser(null);
     const logIn = (user: user) => setUser(user);

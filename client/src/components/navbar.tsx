@@ -10,7 +10,7 @@ const Navbar = () => {
     
     const { user } = useContext(UserContext)!;
     
-    const profile = user !== null ? <NavLink to="">{user.name}</NavLink> : <NavLink to="/aaa" >Prihlásit se</NavLink>
+    const profile = user !== null ? <NavLink to="">{user.name}</NavLink> : <NavLink to="/login" >Prihlásit se</NavLink>
 
     return(
         <header>

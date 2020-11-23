@@ -12,9 +12,16 @@ header{
         transition: height .5s ease-in-out;
         height: 200px;
         overflow: hidden;
-
         display: flex;
         align-items: center;
+
+        &.compressed{
+            height: 0px;
+        }
+        &.compressed + .navbar{
+            box-shadow: 0px 1px 10px #999;
+        }
+
         div{
             height: 150px;
             min-width: 150px;
@@ -59,9 +66,6 @@ header{
                 color: black;
                 text-decoration: none;
 
-                &:hover{
-                   
-                }
                 &:last-child{
                     margin-left: auto;
                     margin-right: 0;
