@@ -11,9 +11,10 @@ import {
 
 //components
 import Navbar from './components/navbar';
-import Login from './components/login/login';
-import Register from './components/login/register';
-import {LegoContainer as Home} from './components/home/legoContainer';
+import Sales from './components/routes/sales/sales';
+import {LegoContainer as Home} from './components/routes/home/legoContainer';
+import RegisterForm from './components/routes/login/registerForm';
+import LoginForm from './components/routes/login/loginForm';
 
 const App = () => {
 
@@ -36,10 +37,10 @@ const App = () => {
               
               <Switch location={location}>
                 <Route exact path='/' component={Home} />
-                <Route path='/login' component={Login} />
-                <Route path='/register' component={Register} />
-                <Route path='/set/:id' component={Login} />
-                <Route path='/set/:id' component={Login} />
+                <Route path='/sales' component={Sales} />
+                <Route path='/login' component={LoginForm} />
+                <Route path='/register' component={RegisterForm} />
+                {/* <Route path='/set/:id' component={} /> */}
               </Switch>
 
             </CSSTransition>

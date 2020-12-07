@@ -24,8 +24,8 @@ const Navbar = () => {
             <div className="navbar">
                 <div>
                     <NavLink exact to="/">Stavebnice</NavLink>
-                    <NavLink to="/a">Lego ve slevě</NavLink>
-                    <NavLink to="/aa">Mé příspěvky</NavLink>
+                    <NavLink to="/sales">Lego ve slevě</NavLink>
+                    <NavLink to="/user/contributions">Mé příspěvky</NavLink>
                     {profile}
                 </div>
             </div>
