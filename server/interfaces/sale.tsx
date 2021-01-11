@@ -1,9 +1,9 @@
 export interface Isale {
-    name: String,
-    originalPrice: Number,
-    currentPrice: Number,
-    sale: String,
-    Description: String,
-    link: String,
-    img: String
+    name: string,
+    originalPrice: string,
+    currentPrice: string,
+    sale: string,
+    Description: string,
+    link: string,
+    img: string
 }

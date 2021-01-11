@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 var cron = require('node-cron');
 
-const {getAlzaItems} = require('./scraping/scraping');
+const { getAlzaItems } = require('./scraping/scraping');
 
 const app = express();
 const PORT = 4000;

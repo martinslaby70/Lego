@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const SaleSchema = new Schema({
     updateTime: String,
     alza: [{
-        name: String,
+        name: Isale,
         originalPrice: Number,
         currentPrice: Number,
         sale: String,
