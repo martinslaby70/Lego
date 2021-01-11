@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const SaleSchema = new Schema({
-    update: String,
+    updateTime: String,
     alza: [{
         name: String,
         originalPrice: Number,
@@ -21,7 +21,15 @@ const SaleSchema = new Schema({
         link: String,
         img: String
     }],
-
+    mall: [{
+        name: String,
+        originalPrice: Number,
+        currentPrice: Number,
+        sale: String,
+        Description: String,
+        link: String,
+        img: String
+    }]
 });
 
 module.exports = mongoose.model('Sales', SaleSchema);
