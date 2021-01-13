@@ -80,52 +80,76 @@ const getCzcItems = async () => {
         });
         let page = await browser.newPage();
 
-        await page.goto(Url, { waitUntil: 'networkidle0' });   
+        await page.goto(Url, { waitUntil: 'networkidle2' });   
 
         let itemsInSale = [];
         let salesCount = 0;
         const itemsCount = await page.$eval('.order-by-sum.h-800', div => parseInt(div.textContent)); 
         const pagesCount = await page.$eval('.paging.ajax > a.last', a => a.textContent)
         
-        for (let i = 0; i < pagesCount-1; i++) {
+        const autoScroll = async (page) => {
+            await page.evaluate(async () => {
+                await new Promise((resolve, reject) => {
+                    let totalHeight = 0;
+                    let distance = 100;
+                    const timer = setInterval(() => {
+                        const scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+        
+                        if(totalHeight >= scrollHeight){
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100);
+                });
+            });
+        }
+
+        for (let i = 1; i < pagesCount; i++) {
            
             const items = await page.$$('.new-tile');
+            await autoScroll(page);
 
-            for (const item of items) {
-               try {
-                    const name = await item.$eval('.tile-title > h5 > a', a => a.textContent.trim('\\n'));
-                    const img = await item.$eval('.img-wrapper a img', img => img.getAttribute('src'));   
-                    const originalPrice = await item.$eval('span.price-before > span.price-vatin', span => span.textContent);
-                    const currentPrice = await item.$eval('span.price > span.price-vatin', span => span.textContent);
-                    const sale = await item.$eval('.img-wrapper > span.discount-percent', span => span.textContent.trim('\\n'));
-                    const description = await item.$eval('.tile-desc', span => span.textContent.trim('\\n'));
-                    const link = await item.$eval('a.image', a => 'https://www.czc.cz' + a.getAttribute('href'));
+            for (let l = 0; l < items.length; l++) {
+                const item = items[l];
+                console.clear();
+                console.log(`${l+ (27*i)} / ${itemsCount}`)
+                
+                try {
+                        
+                        const name = await item.$eval('.tile-title > h5 > a', a => a.textContent.trim('\\n'));
+                        const img = await item.$eval('a.image > img', img => img.getAttribute('src'));   
+                        const originalPrice = await item.$eval('span.price-before > span.price-vatin', span => span.textContent);
+                        const currentPrice = await item.$eval('span.price > span.price-vatin', span => span.textContent);
+                        const sale = await item.$eval('.img-wrapper > span.discount-percent', span => span.textContent.trim('\\n'));
+                        const description = await item.$eval('.tile-desc', span => span.textContent.trim('\\n'));
+                        const link = await item.$eval('a.image', a => 'https://www.czc.cz' + a.getAttribute('href'));
+                        
+                        const avalibleCategories = ['City', 'Technik', 'Exlusive', 'Creator', 'Ninjago', 'Star Wars', 'Architecture', 'Super Mario', 'Harry Potter', 'Marvel'];
+                        let categories = [];
+                        for (const category of avalibleCategories) {                           
+                            if (description.toUpperCase().includes(category.toUpperCase()))
+                                categories.push(category);
+                        }
+                        
                     
-                    const avalibleCategories = ['City', 'Technik', 'Exlusive', 'Creator', 'Ninjago', 'Star Wars', 'Architecture', 'Super Mario', 'Harry Potter', 'Marvel'];
-                    let categories = [];
-                    for (let i = 0; i < avalibleCategories.length; i++) {
-                        const category = avalibleCategories[i];
-                        if (description.toUpperCase().includes(category.toUpperCase()))
-                            categories.push(category);
-                    }
-                    
-                   
-                    salesCount++;
+                        salesCount++;
 
-                    itemsInSale.push({
-                        name,
-                        originalPrice,
-                        currentPrice,
-                        sale,
-                        description,
-                        link,
-                        img,
-                        categories
-                    })   
-               } catch (err) {
-                   //not in sale
-                   //console.log(err);
-               }
+                        itemsInSale.push({
+                            name,
+                            originalPrice,
+                            currentPrice,
+                            sale,
+                            description,
+                            link,
+                            img,
+                            categories
+                        })   
+                } catch (err) {
+                    //not in sale
+                    //console.log(err);
+                }
             }
             
             try {
@@ -147,8 +171,6 @@ const getCzcItems = async () => {
         salesCount,
         itemsInSale
     });
-
-   
     
 }
 
