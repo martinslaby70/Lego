@@ -17,7 +17,7 @@ const getAlzaItems = async () => {
     for (let i = 0; i < itemsCount; i++) {
         const item = items[i];
         
-        //replace with condition
+        //replace with condition if(isInSale)
         try 
         {
             const name = await item.$eval('a.name', a => a.textContent);
@@ -27,7 +27,17 @@ const getAlzaItems = async () => {
             const description = await (await item.$eval('.Description', span => span.textContent)).trim('\n');
             const link = await item.$eval('a.name', a => 'https://www.alza.cz' + a.getAttribute('href'));
             const img = await item.$eval('em > img', img => img.getAttribute('data-src')); 
-            const categories = await item.$eval('a.pc.browsinglink', a => a.getAttribute('data-impression-category').replace(/\s/g, '').split("\\").filter(category => category !== 'Hračky').filter(category => category !== 'LEGO'));
+            
+            const categories = await item.$eval('a.pc.browsinglink', a => {
+                //format categories
+                const temp = a.getAttribute('data-impression-category')
+                .replace(/\s/g, '')
+                .split("\\")
+                .filter(category => category !== 'Hračky')
+                .filter(category => category !== 'LEGO');
+            
+                return temp;
+            });
             
             salesCount++;
 
@@ -48,7 +58,7 @@ const getAlzaItems = async () => {
         
     }
 
-    browser.close();
+    await browser.close();
 
     return {
         itemsCount,
@@ -57,12 +67,60 @@ const getAlzaItems = async () => {
     };
 }
 
-const getCzcItems = async () => {
 
+const getCzcItems = async () => {
+    let Url = 'https://www.czc.cz/lego/lego/zbozi?q-first=0';
+
+    let browser = await puppeteer.launch({headless: false});
+    let page = await browser.newPage();
+    
+    await page.goto(Url, { waitUntil: 'networkidle2' });   
+   
+    
+    const pagesCount = await page.$eval('.paging.ajax > a.last', a => Number(a.innerHTML))
+    
+    let itemsInSale = [];
+    let salesCount = 0;
+
+
+    for (let i = 0; i < pagesCount - 1; i++) {
+        const button = await page.$('button.btn.show-next');
+        button.click();    
+    }
+
+    await page.waitForSelector('#titles');
+
+    const items = await page.$$('#titles > div > div');
+    const itemsCount = items.length;
+
+    for (const item of items) {
+      
+        
+        try {
+            const name = item.$eval('.tile-title > h5 > a', a => a.textContent);
+            const img = item.$eval('a.image > img', img => img.getAttribute('src'));
+
+            console.log({name, img});
+
+            salesCount++;
+            itemsInSale.push({name,img})
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    await browser.close();
+
+    return {
+        itemsCount,
+        salesCount,
+        itemsInSale
+    };
 
 
 }
 
 
 
-module.exports = {getAlzaItems};
+module.exports = {getAlzaItems, getCzcItems};

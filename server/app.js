@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 var cron = require('node-cron');
 
-const { getAlzaItems } = require('./scraping/scraping');
+const { getAlzaItems, getCzcItems } = require('./scraping/scraping');
 
 const app = express();
 const PORT = 4000;
@@ -19,7 +19,7 @@ cron.schedule('0 0 * * *', () => {
 
 
 app.get('/', (req, res) => {
-   getAlzaItems()
+   getCzcItems()
    .then(response => {
         res.send(response);
    })

@@ -4,33 +4,18 @@ const Schema = mongoose.Schema;
 
 const SaleSchema = new Schema({
     updateTime: String,
-    alza: [{
-        name: Isale,
-        originalPrice: Number,
-        currentPrice: Number,
-        sale: String,
-        Description: String,
-        link: String,
-        img: String
-    }],
-    czc: [{
+    itemsCount: Number,
+    salesCount: Number,
+    sales: [{
         name: String,
-        originalPrice: Number,
-        currentPrice: Number,
+        originalPrice: String,
+        currentPrice: String,
         sale: String,
         Description: String,
         link: String,
-        img: String
+        img: String,
+        seller: String
     }],
-    mall: [{
-        name: String,
-        originalPrice: Number,
-        currentPrice: Number,
-        sale: String,
-        Description: String,
-        link: String,
-        img: String
-    }]
 });
 
 module.exports = mongoose.model('Sales', SaleSchema);
